@@ -119,7 +119,7 @@ Enable your Window Greeter and other services
         systemctl enable ufw
         systemctl enable NetworkManager
         
-Create your initramfs or Initial RAM disk files to load the linux Kernel and Pivot Root
+Create your initramfs or Initial RAM disk files to load the linux Kernel
 
         mkinitcpio -P
 
