@@ -146,7 +146,7 @@ Install Grub
 
 Configure Grub
 
-        grub-install --target=x86_64-efi --efi-directory=/boot/EFI --bootloader-id=GRUB
+        grub-install --removable --target=x86_64-efi --efi-directory=/boot/EFI --bootloader-id=GRUB
         grub-mkconfig -o /boot/grub/grub.cfg
 
 Shutdown and remove the USB installer. Boot your system and login to KDE plasma
