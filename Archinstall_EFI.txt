@@ -131,6 +131,7 @@ Create a Regular Non-Root User - replace Archuser with your username
 Set a password for Root and your regular users - replace Archuser with your username
 
         passwd Archuser
+        passwd root
 
             ****** Example passwd root and then enter the new password twice ********
 
