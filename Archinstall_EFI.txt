@@ -2,7 +2,7 @@
 
 
 Boot the Archiso
-Connect to the internet like you did before with iwctl
+Connect to the Internet with iwctl
 
 Ping google.com or Archlinux.org with the command
         ping -c 2 archlinux.org
@@ -11,17 +11,17 @@ If you get responses; congrats you are connected. YAY!
 
 
 Check the time and date with timedatectl  (This is a systemd command and systemd is what spawns all your processes)
-If the date looks good continue, otherwise reboot into your bios and set the correct date and time and boot arch again
+If the date looks good continue, otherwise reboot into your BIOS/EFI and set the correct date and time and boot arch again
 
 Identify your available Disks with lsblk or blkid
 
         For Example - lsblk -f which will display connected disks and any existing filesystems
-        Block devices are listed in /dev directory.
+        Block devices are listed in /dev directory. A Block device is any storage Device.
         USB devices start with sdX where the 'X' is replaced with a variable starting with 'a' ie; sda, sdb, etc
-        NVME devices are nvme0n1, nvme1n1 etc
+        NVME devices start with nvme0n1, nvme1n1 etc
 
 partition your disk with cfdisk /dev/nvme0n1 which is your system disk.
-        cfdisk /dev/nvme0n1
+        Example - cfdisk /dev/nvme0n1 OR cfdisk /dev/nvme0n1n
         Enter
 
 *******Ensure that you've BACKED UP any data you need prior to moving forward*******
@@ -29,12 +29,10 @@ partition your disk with cfdisk /dev/nvme0n1 which is your system disk.
 
 Delete any existing partitions and write this to disk.
 
-
 Then create a new partition and choose GPT for the partition scheme (This is for large Disks that aren't supported by Legacy BIOS - compatability)
 
-
-Create a 512mb MBR partition and make this a Primary partition such that the BIOS knows to boot from this partition. Later we will install the
-GRUB boot loader to this partition.
+Create a 512mb MBR partition and make this a Primary partition such that the UEFI knows to boot from this partition. Later we will install the
+GRUB boot loader to this partition. Choose vFAT as the filesystem
 
             *****MARK Your partition /dev/nvme0n1p1 as Primary and Boot********
 
@@ -44,11 +42,11 @@ You can set up the partitions to use the amount of space that suits you. For thi
 Create a Linux Partition that takes up roughly the entire Disk using numbers and Designate the size with letters GB for gigabyte. Leave 2gb of space
 for your swap partition which we will create next
 
-Create a 2gb swap partition ( not that this does not need to be formatted)
+Create a 2gb swap partition ( note that this does not need to be formatted)
 
 Write out the newly created partition table and quit cfdisk.
 
-Now you need to format the MBR partition and the Linux File Systtem
+Now you need to format the partitions and the Linux File System and label them
 
 To Do So, run the following commands
 
@@ -60,8 +58,8 @@ To Do So, run the following commands
     swap partition, with almost no performance issues.
 
 
-In order for Linux to operate correctly and find your boo/root and home folders, we need to mount the Filesystems.
-First we mount the Linux Filesystm, make a boot directory, and mount the Boot partition
+In order for Linux to operate correctly and find your boot/root and home folders, we need to mount the Filesystems.
+First we mount the Linux Filesystem, make a boot directory, and mount the Boot partition
 
         mount /dev/nvme0n1p2 /mnt
         mount /dev/nvme0n1p1 /mnt/boot
@@ -73,8 +71,7 @@ If you created a swap partition, enable with
 
 Let's install some packages (this is my preference and should work for you at this point. You may wish to revise this list as you become an Arch Linux Pro)
 
-    pacstrap -k base base-devel linux linux-lts linux-docs linux-lts-docs linux-headers linux-lts-headers linux-firmware bash nano vim code amd-ucode intel-ucode sddm
-    plasma-meta packagekit-qt5 firewalld networkmanager plasma-nm dhcpd texinfo man-pages man-db tealdeer firefox chromium
+    pacstrap -k base base-devel linux linux-lts linux-docs linux-lts-docs linux-headers linux-lts-headers linux-firmware bash nano vim code amd-ucode intel-ucode sddm plasma packagekit-qt5 ufw networkmanager plasma-nm dhcpd texinfo man-pages man-db tealdeer firefox chromium
 
 
 Set up your File System Table as such
@@ -116,10 +113,12 @@ Enable DHCP as Follows so you can get an IP Address
 
         systemctl enable dhcpcd
 
-Enable your Window Greeter
+Enable your Window Greeter and other services
 
         systemctl enable sddm
-
+        systemctl enable ufw
+        systemctl enable NetworkManager
+        
 Create your initramfs or Initial RAM disk files to load the linux Kernel and Pivot Root
 
         mkinitcpio -P
@@ -175,7 +174,7 @@ I'd like to point out some notes on what I've tried to do here, and caution that
 
 Also note that there are two Disk Schemas - The Older Master Boot Record or MBR which BIOS based Systems use to look for meta data on the Device
 And uses a concept called Primary and Secondary Partitions. You Can only Boot to a Primary Partition that is marked Boot. This is Done when creating
-your parttition table in CFDisk
+your partition table in CFDisk
 
 I've included commands to set up all parts of the system. Of Particular note is the pacstrap command. Here is a brief explanation of what we've done there
 
