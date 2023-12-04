@@ -124,13 +124,13 @@ Create your initramfs or Initial RAM disk files to load the linux Kernel and Piv
         mkinitcpio -P
 
 
-Create a Regular Non-Root User
+Create a Regular Non-Root User - replace Archuser with your username
 
         useradd -m Archuser
 
-Set a password for Root and your regular users
+Set a password for Root and your regular users - replace Archuser with your username
 
-        passwd User
+        passwd Archuser
 
             ****** Example passwd root and then enter the new password twice ********
 
