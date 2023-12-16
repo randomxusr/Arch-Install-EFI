@@ -74,9 +74,12 @@ If you created a swap partition, enable with
         swapon /dev/nvme0n1p3
 
 
-Let's install some packages (this is my preference and should work for you at this point. You may wish to revise this list as you become an Arch Linux Pro)
+#### Let's install some packages (this is my preference and should work for you at this point. You may wish to revise this list as you become an Arch Linux Pro)
+##### install either plasma-meta for the entire plasma-group, or plasma group to choose individual packages which is more lightweight. Alternatively;
+consider a DE like lxqt or only openbox for a slimmed down system but note the will require some hands on modifications to get to a useful states.
+#### I recommend installing plasma-meta.
 
-    pacstrap -k base base-devel linux linux-lts linux-docs linux-lts-docs linux-headers linux-lts-headers linux-firmware bash nano vim code amd-ucode intel-ucode sddm plasma packagekit-qt5 ufw networkmanager plasma-nm dhcpd texinfo man-pages man-db tealdeer firefox chromium
+    pacstrap -k base base-devel linux linux-lts linux-docs linux-lts-docs linux-headers linux-lts-headers linux-firmware bash nano vim code amd-ucode intel-ucode sddm plasma-meta packagekit-qt5 ufw networkmanager plasma-nm dhcpd texinfo man-pages man-db tealdeer firefox chromium
 
 
 We then create the FSTAB which is used to mount your filesystems and then change root into your Arch system to configure things a bit further.
