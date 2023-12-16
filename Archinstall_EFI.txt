@@ -1,4 +1,4 @@
-###### Arch Setup for BIOS Baased Systems with KDE Plasma ###########
+###### Arch Setup for EFI Baased Systems with KDE Plasma ###########
 
 
 Boot the Archiso
@@ -32,7 +32,10 @@ Delete any existing partitions and write this to disk.
 Then create a new partition and choose GPT for the partition scheme (This is for large Disks that aren't supported by Legacy BIOS - compatability)
 
 Create a 512mb MBR partition and make this a Primary partition such that the UEFI knows to boot from this partition. Later we will install the
-GRUB boot loader to this partition. Choose vFAT as the filesystem
+GRUB boot loader to this partition. Choose vFAT as the filesystem - Make sure to select the EFI option in the available filesystems.
+
+use the command cfdisk /dev/YourDevice  ##### your device may be a USB or NVME drive.
+
 
             *****MARK Your partition /dev/nvme0n1p1 as Primary and Boot********
 
@@ -65,6 +68,8 @@ First we mount the Linux Filesystem, make a boot directory, and mount the Boot p
         mount /dev/nvme0n1p1 /mnt/boot
         mkdir -p /mnt/boot/EFI
 
+###### Modify the device path accordingly if you're installing to a USB Drive.
+
 If you created a swap partition, enable with
         swapon /dev/nvme0n1p3
 
@@ -74,7 +79,7 @@ Let's install some packages (this is my preference and should work for you at th
     pacstrap -k base base-devel linux linux-lts linux-docs linux-lts-docs linux-headers linux-lts-headers linux-firmware bash nano vim code amd-ucode intel-ucode sddm plasma packagekit-qt5 ufw networkmanager plasma-nm dhcpd texinfo man-pages man-db tealdeer firefox chromium
 
 
-Set up your File System Table as such
+We then create the FSTAB which is used to mount your filesystems and then change root into your Arch system to configure things a bit further.
 
         genfstab -U /mnt >> /mnt/etc/fstab
 
@@ -155,7 +160,7 @@ Shutdown and remove the USB installer. Boot your system and login to KDE plasma
         exit
         shutdown now
 
-remove the USB drive
+remove the installer USB drive
 
 Boot the system and login to KDE Plasma Desktop
 
@@ -193,8 +198,6 @@ included tealdeer which can be used to search commondly used commands and their 
 
         ***Replace command with the command you'd like assistance with *****
 
-
-We then create the FSTAB which is used to mount your filesystems and then change root into your Arch system to configure things a bit further.
 
 The steps can be followed as is, and will work without issues in a Perfect world. There may be some glitches along the way as partake on this journey.
 The key is to remain calm and patient, and kick some ass.
